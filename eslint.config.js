@@ -3,7 +3,7 @@ const globals = require('globals');
 
 module.exports = [
     {
-        ignores: ['.opencode/dist/**', '.cursor/**', 'node_modules/**', '.venv/**', 'venv/**', 'coverage/**', 'workflows/**/*.workflow.*', '.claude/workflows/**']
+        ignores: ['.opencode/dist/**', '.cursor/**', 'node_modules/**', '.venv/**', 'venv/**', 'coverage/**', 'workflows/**/*.workflow.*', '.claude/workflows/**', 'apps/bank-battle-live/lib/vendor-qr/**']
     },
     js.configs.recommended,
     {
@@ -35,6 +35,21 @@ module.exports = [
         files: ['**/*.mjs'],
         languageOptions: {
             sourceType: 'module'
+        }
+    },
+    {
+        // Standalone Vercel app (ESM, "type": "module"); its public/ scripts run in the browser.
+        files: ['apps/bank-battle-live/**/*.js'],
+        languageOptions: {
+            sourceType: 'module'
+        }
+    },
+    {
+        files: ['apps/bank-battle-live/public/**/*.js'],
+        languageOptions: {
+            globals: {
+                ...globals.browser
+            }
         }
     },
     {

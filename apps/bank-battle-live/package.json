@@ -1,0 +1,11 @@
+{
+  "name": "bank-battle-live-tdiu",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "node local-server.js",
+    "check": "node tests.mjs"
+  },
+  "engines": {"node": "22.x"}
+}
