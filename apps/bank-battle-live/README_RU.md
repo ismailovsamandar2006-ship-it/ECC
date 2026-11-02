@@ -26,8 +26,8 @@ Vercel запускает код как отдельные функции, по�
 ### 1. Подключить Redis (один раз, ~1 минута)
 
 1. Vercel → проект **bank-battle-live** → вкладка **Storage** → **Create Database** → **Upstash for Redis** (бесплатный план подходит).
-2. Подключите базу к проекту для окружений **Production** и **Preview**; префикс переменных оставьте по умолчанию.
-3. Vercel сам добавит переменные `KV_REST_API_URL` и `KV_REST_API_TOKEN` — игра понимает их автоматически.
+2. Регион базы — **Frankfurt (eu-central-1)**: там же работают функции игры. Подключите базу к проекту для окружений **Production** и **Preview**.
+3. Vercel сам добавит переменные `KV_REST_API_URL` и `KV_REST_API_TOKEN` (или с вашим префиксом, например `STORAGE_REST_API_URL`) — игра находит их автоматически.
 4. Сделайте **Redeploy** последнего деплоя (Deployments → ⋯ → Redeploy), чтобы функции получили переменные.
 
 Если база создана вручную на [Upstash](https://console.upstash.com/), добавьте в Vercel → **Settings → Environment Variables** пару `UPSTASH_REDIS_REST_URL` и `UPSTASH_REDIS_REST_TOKEN` (обычный, не read-only токен) и тоже выполните Redeploy. Не публикуйте токен в чате, GitHub или HTML.

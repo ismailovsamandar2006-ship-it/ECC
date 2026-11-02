@@ -29,10 +29,22 @@ function memory(command) {
   if(op==='EXPIRE') {until.set(key,Date.now()+Number(a[1])*1000);return 1;}
   throw Error('Unsupported local store command: '+op);
 }
-// Vercel Marketplace (Upstash for Redis) injects KV_REST_API_URL / KV_REST_API_TOKEN;
-// a manually created Upstash database uses UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN.
-const restUrl = () => process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || '';
-const restToken = () => process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || '';
+// Credentials: a manually created Upstash database uses UPSTASH_REDIS_REST_URL/_TOKEN;
+// Vercel Marketplace (Upstash for Redis) injects <PREFIX>_REST_API_URL/_TOKEN, where the
+// prefix is KV by default but can be renamed in the connect dialog.
+function credentials() {
+  const env = process.env;
+  if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) return [env.UPSTASH_REDIS_REST_URL, env.UPSTASH_REDIS_REST_TOKEN];
+  if (env.KV_REST_API_URL && env.KV_REST_API_TOKEN) return [env.KV_REST_API_URL, env.KV_REST_API_TOKEN];
+  for (const key of Object.keys(env).sort()) {
+    if (!key.endsWith('_REST_API_URL')) continue;
+    const token = env[key.slice(0, -'_URL'.length) + '_TOKEN'];
+    if (env[key] && token) return [env[key], token];
+  }
+  return ['', ''];
+}
+const restUrl = () => credentials()[0];
+const restToken = () => credentials()[1];
 export const isReady = () => process.env.LOCAL_DEMO==='1' || Boolean(restUrl() && restToken());
 export async function redis(...command) {
   if(process.env.LOCAL_DEMO==='1') return memory(command);
