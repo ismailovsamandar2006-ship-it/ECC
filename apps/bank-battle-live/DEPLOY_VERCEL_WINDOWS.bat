@@ -1,6 +1,7 @@
 @echo off
 chcp 65001 >nul
-cd /d "%~dp0"
+rem Root Directory of the Vercel project is apps/bank-battle-live, so deploy from the repo root.
+cd /d "%~dp0..\.."
 echo.
 echo  ===============================================
 echo        BANK BATTLE LIVE - VERCEL

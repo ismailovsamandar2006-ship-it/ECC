@@ -13,7 +13,13 @@
 
 ## Vercel: проект и база данных
 
-Игра развёрнута как Vercel-проект **`bank-battle-live`** (команда `dojo`). Статические страницы отдаются из `public/`, серверная логика — функции `api/game.js` и `api/qr.js`.
+Игра развёрнута как Vercel-проект **`bank-battle-live`** (команда `dojo`):
+
+- сайт для студентов и ведущего: **<https://bank-battle-live.vercel.app>**
+- пульт ведущего: <https://bank-battle-live.vercel.app/host.html>
+- проверка сервера: <https://bank-battle-live.vercel.app/api/game?op=health>
+
+Статические страницы отдаются из `public/`, серверная логика — функции `api/game.js` и `api/qr.js`. В настройках проекта Vercel **Root Directory = `apps/bank-battle-live`**: сборка идёт из этой папки репозитория.
 
 Vercel запускает код как отдельные функции, поэтому общий счёт хранится в **Upstash Redis** (REST по HTTPS, опрос раз в 1.3–3.2 секунды). Без базы главная страница покажет предупреждение «Требуется подключить Upstash Redis», а создание комнаты вернёт понятную ошибку конфигурации.
 
@@ -28,8 +34,8 @@ Vercel запускает код как отдельные функции, по�
 
 ### 2. Обновить сайт после изменений
 
-- Из этой папки: `npx vercel --prod` (при первом запуске выберите существующий проект `bank-battle-live`), либо `DEPLOY_VERCEL_WINDOWS.bat` на Windows.
-- Корнем проекта Vercel должна быть именно эта папка (`apps/bank-battle-live`): в ней лежат `vercel.json`, `package.json`, `api/`, `lib/` и `public/`.
+- Новые переменные окружения (например, после подключения Redis): Vercel → **Deployments** → последний деплой → ⋯ → **Redeploy**.
+- Новые правки кода: запустите `npx vercel --prod` **из корня репозитория** (при первом запуске выберите существующий проект `bank-battle-live`) или `DEPLOY_VERCEL_WINDOWS.bat` на Windows — он сам перейдёт в корень. Vercel возьмёт Root Directory `apps/bank-battle-live` из настроек проекта; запуск прямо из этой папки завершится ошибкой «path does not exist».
 
 ### 3. Проверить, что онлайн-игра работает
 
